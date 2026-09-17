@@ -1,0 +1,38 @@
+import axios from 'axios';
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export const registerUser = async (userData) => {
+  const response = await api.post('/customers/register', userData);
+  return response.data;
+};
+
+export const loginUser = async (credentials) => {
+  const response = await api.post('/customers/login', credentials);
+  return response.data;
+};
+
+export const getProfile = async () => {
+  const response = await api.get('/customers/me');
+  return response.data;
+};
+
+export const logoutUser = async () => {
+  const response = await api.post('/customers/logout');
+  return response.data;
+};
+
+export const changePassword = async (data) => {
+  const response = await api.patch('/customers/change-password', data);
+  return response.data;
+};
+
+export default api;
