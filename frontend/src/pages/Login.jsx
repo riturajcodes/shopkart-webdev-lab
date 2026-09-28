@@ -43,7 +43,7 @@ const Login = ({ setUser }) => {
         if (setUser && response.customer) {
           setUser(response.customer);
         }
-        navigate('/home');
+        navigate('/profile');
       } else {
         setErrorMsg('Invalid Credentials');
       }

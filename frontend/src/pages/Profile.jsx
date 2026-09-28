@@ -2,18 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getProfile, logoutUser, changePassword } from '../services/api';
 
-const DEMO_PRODUCTS = [
-  { id: 1, brand: 'ACNE STUDIOS', name: 'OVERSIZED BLAZER', price: '$850' },
-  { id: 2, brand: 'BOTTEGA VENETA', name: 'CASSETTE BAG', price: '$3,500' },
-  { id: 3, brand: 'THE ROW', name: 'ZIPPED BOOT', price: '$1,490' },
-  { id: 4, brand: 'JIL SANDER', name: 'TAILORED SHIRT', price: '$590' },
-  { id: 5, brand: 'SAINT LAURENT', name: 'LEATHER JACKET', price: '$4,990' },
-  { id: 6, brand: 'KHAITE', name: 'CASHMERE CARDIGAN', price: '$1,200' },
-  { id: 7, brand: 'LOEWE', name: 'PUZZLE BAG', price: '$3,100' },
-  { id: 8, brand: 'PRADA', name: 'CHUNKY LOAFER', price: '$1,150' }
-];
-
-const Home = ({ user, setUser }) => {
+const Profile = ({ user, setUser }) => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(user);
   const [loading, setLoading] = useState(!user);
@@ -112,17 +101,22 @@ const Home = ({ user, setUser }) => {
         </div>
       </div>
 
-      <div className="section-title">NEW ARRIVALS</div>
-      
-      <div className="product-grid">
-        {DEMO_PRODUCTS.map((product) => (
-          <div key={product.id} className="product-card">
-            <div className="product-image"></div>
-            <div className="product-brand">{product.brand}</div>
-            <div className="product-name">{product.name}</div>
-            <div className="product-price">{product.price}</div>
-          </div>
-        ))}
+      <div className="section-title">QUICK ACTIONS</div>
+
+      <div className="quick-actions">
+        <div className="action-card">
+          <h2>Your Cart</h2>
+          <p>Your cart is empty.</p>
+          <span className="action-hint">Cart &amp; checkout are coming in a future update.</span>
+        </div>
+
+        <div className="action-card">
+          <h2>Browse Products</h2>
+          <p>Discover our full catalogue of products.</p>
+          <button className="btn-black" onClick={() => navigate('/products')}>
+            Browse Products
+          </button>
+        </div>
       </div>
 
       {showModal && (
@@ -185,4 +179,4 @@ const Home = ({ user, setUser }) => {
   );
 };
 
-export default Home;
+export default Profile;

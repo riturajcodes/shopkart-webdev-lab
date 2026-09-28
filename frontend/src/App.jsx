@@ -3,8 +3,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Home from './pages/Home';
-import Shop from './pages/Shop';
+import Profile from './pages/Profile';
+import Landing from './pages/Landing';
+import Products from './pages/Products';
+import ProductDetails from './pages/ProductDetails';
 import { getProfile } from './services/api';
 import './index.css';
 
@@ -50,8 +52,10 @@ function App() {
           <Routes>
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login setUser={setUser} />} />
-            <Route path="/home" element={<Home user={user} setUser={setUser} />} />
-            <Route path="/" element={<Shop />} />
+            <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:id" element={<ProductDetails />} />
+            <Route path="/" element={<Landing />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>

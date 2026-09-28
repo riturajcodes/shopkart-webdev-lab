@@ -19,13 +19,14 @@ const Navbar = ({ user, setUser }) => {
   return (
     <nav>
       <div>
-        <Link to="/home" className="brand-link">SHOPKART.</Link>
+        <Link to="/" className="brand-link">SHOPKART.</Link>
       </div>
 
       <div className="nav-links">
+        <Link to="/products" id="nav-products-link">Products</Link>
         {user ? (
           <>
-            <span>{user.fullName}</span>
+            <Link to="/profile" id="nav-profile-link">{user.fullName}</Link>
             <button id="logout-btn" onClick={handleLogout}>
               Logout
             </button>
