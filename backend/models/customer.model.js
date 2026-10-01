@@ -27,6 +27,10 @@ const customerSchema = new mongoose.Schema(
       type: String,
         required: true,
       trim: true
+    },
+    wishlist: {
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
+      default: []
     }
   },
   { timestamps: { createdAt: true,

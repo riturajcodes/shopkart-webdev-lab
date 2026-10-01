@@ -603,3 +603,36 @@ input:focus {
   color: var(--text-muted);
   cursor: not-allowed;
 }
+
+/* WISHLIST */
+.product-card .btn-outline {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.product-card .btn-outline:disabled {
+  cursor: default;
+}
+
+.state-message .btn-black {
+  width: auto;
+  min-width: 220px;
+}
+
+.wishlist-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.wishlist-header h1 {
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.wishlist-header p {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}

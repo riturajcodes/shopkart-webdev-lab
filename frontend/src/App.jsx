@@ -7,6 +7,7 @@ import Profile from './pages/Profile';
 import Landing from './pages/Landing';
 import Products from './pages/Products';
 import ProductDetails from './pages/ProductDetails';
+import Wishlist from './pages/Wishlist';
 import { getProfile } from './services/api';
 import './index.css';
 
@@ -55,6 +56,7 @@ function App() {
             <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductDetails />} />
+            <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/" element={<Landing />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

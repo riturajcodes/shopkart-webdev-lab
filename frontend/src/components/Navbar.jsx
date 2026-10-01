@@ -26,6 +26,7 @@ const Navbar = ({ user, setUser }) => {
         <Link to="/products" id="nav-products-link">Products</Link>
         {user ? (
           <>
+            <Link to="/wishlist" id="nav-wishlist-link">Wishlist</Link>
             <Link to="/profile" id="nav-profile-link">{user.fullName}</Link>
             <button id="logout-btn" onClick={handleLogout}>
               Logout
