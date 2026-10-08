@@ -29,6 +29,7 @@ app.get('/health', (req, res) => {
 app.use('/customers', require('./routes/customer.routes'));
 app.use('/products', require('./routes/product.routes'));
 app.use('/wishlist', require('./routes/wishlist.routes'));
+app.use('/cart', require('./routes/cart.routes'));
 
 app.use((error, req, res, next) => {
   console.error(error);

@@ -1,13 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getProductById } from '../services/api';
+import { useCart } from '../context/CartContext';
 
 const ProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addItem } = useCart();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [adding, setAdding] = useState(false);
+  const [cartError, setCartError] = useState('');
+
+  const handleAddToCart = async () => {
+    setAdding(true);
+    setCartError('');
+    try {
+      await addItem(product._id);
+    } catch (err) {
+      setCartError(err.response?.status === 401 ? 'Please login to add this product.' : 'Unable to add product to cart.');
+    } finally {
+      setAdding(false);
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -64,9 +80,10 @@ const ProductDetails = () => {
           <div className={`stock-status${inStock ? '' : ' out-of-stock'}`}>
             {inStock ? `${product.stock} units left` : 'Out of stock'}
           </div>
-          <button className="btn-black" disabled={!inStock}>
-            {inStock ? 'Add to Cart' : 'Out of Stock'}
+          <button className="btn-black" onClick={handleAddToCart} disabled={!inStock || adding}>
+            {!inStock ? 'Out of Stock' : adding ? 'Adding...' : 'Add to Cart'}
           </button>
+          {cartError && <div className="field-error">{cartError}</div>}
         </div>
       </div>
     </div>

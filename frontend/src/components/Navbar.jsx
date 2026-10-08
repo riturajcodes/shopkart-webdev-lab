@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { logoutUser } from '../services/api';
+import { useCart } from '../context/CartContext';
 
 const Navbar = ({ user, setUser }) => {
   const navigate = useNavigate();
+  const { cartItemCount } = useCart();
 
   const handleLogout = async () => {
     try {
@@ -27,6 +29,7 @@ const Navbar = ({ user, setUser }) => {
         {user ? (
           <>
             <Link to="/wishlist" id="nav-wishlist-link">Wishlist</Link>
+            <Link to="/cart" id="nav-cart-link">Cart ({cartItemCount})</Link>
             <Link to="/profile" id="nav-profile-link">{user.fullName}</Link>
             <button id="logout-btn" onClick={handleLogout}>
               Logout

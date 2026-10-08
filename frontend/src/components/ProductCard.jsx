@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addToWishlist } from '../services/api';
+import { useCart } from '../context/CartContext';
 
 const WISHLIST_LABEL = {
   idle: '♡ Add to Wishlist',
@@ -10,8 +11,10 @@ const WISHLIST_LABEL = {
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
+  const { addItem } = useCart();
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState('');
+  const [adding, setAdding] = useState(false);
   const inStock = product.stock > 0;
 
   const handleWishlist = async () => {
@@ -31,6 +34,18 @@ const ProductCard = ({ product }) => {
     }
   };
 
+  const handleAddToCart = async () => {
+    setAdding(true);
+    setError('');
+    try {
+      await addItem(product._id);
+    } catch (err) {
+      setError(err.response?.status === 401 ? 'Please login to add products to your cart.' : 'Unable to add product to cart.');
+    } finally {
+      setAdding(false);
+    }
+  };
+
   return (
     <div className="product-card">
       <div className="product-image">
@@ -44,6 +59,9 @@ const ProductCard = ({ product }) => {
       </div>
       <button className="btn-black" onClick={() => navigate(`/products/${product._id}`)}>
         View Details
+      </button>
+      <button className="btn-outline" onClick={handleAddToCart} disabled={adding || !inStock}>
+        {adding ? 'Adding...' : 'Add to Cart'}
       </button>
       <button className="btn-outline" onClick={handleWishlist} disabled={status !== 'idle'}>
         {WISHLIST_LABEL[status]}

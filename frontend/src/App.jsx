@@ -8,6 +8,8 @@ import Landing from './pages/Landing';
 import Products from './pages/Products';
 import ProductDetails from './pages/ProductDetails';
 import Wishlist from './pages/Wishlist';
+import Cart from './pages/Cart';
+import { CartProvider } from './context/CartContext';
 import { getProfile } from './services/api';
 import './index.css';
 
@@ -47,21 +49,24 @@ function App() {
 
   return (
     <Router>
-      <div>
-        <Navbar user={user} setUser={setUser} />
-        <main>
-          <Routes>
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login setUser={setUser} />} />
-            <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/:id" element={<ProductDetails />} />
-            <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/" element={<Landing />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </main>
-      </div>
+      <CartProvider user={user}>
+        <div>
+          <Navbar user={user} setUser={setUser} />
+          <main>
+            <Routes>
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login setUser={setUser} />} />
+              <Route path="/profile" element={<Profile user={user} setUser={setUser} />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/:id" element={<ProductDetails />} />
+              <Route path="/wishlist" element={<Wishlist />} />
+              <Route path="/cart" element={user ? <Cart /> : <Navigate to="/login" replace />} />
+              <Route path="/" element={<Landing />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </main>
+        </div>
+      </CartProvider>
     </Router>
   );
 }
