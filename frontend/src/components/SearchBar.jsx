@@ -1,28 +1,49 @@
 import React from 'react';
+import { CATEGORIES, SORT_OPTIONS } from '../constants';
+import { SearchIcon } from './Icons';
 
-const CATEGORIES = ['All Categories', 'Electronics', 'Fashion', 'Books', 'Home'];
-
-const SearchBar = ({ search, onSearchChange, category, onCategoryChange }) => {
+const SearchBar = ({ search, onSearchChange, category, onCategoryChange, sort, onSortChange }) => {
   return (
-    <div className="search-bar">
-      <input
-        type="text"
-        placeholder="Search products..."
-        value={search}
-        onChange={(e) => onSearchChange(e.target.value)}
-        className="search-input"
-      />
-      <select
-        value={category}
-        onChange={(e) => onCategoryChange(e.target.value)}
-        className="category-select"
-      >
-        {CATEGORIES.map((cat) => (
-          <option key={cat} value={cat === 'All Categories' ? '' : cat}>
-            {cat}
-          </option>
+    <div className="filter-bar">
+      <div className="category-pills" role="group" aria-label="Filter by category">
+        {['', ...CATEGORIES].map((cat) => (
+          <button
+            key={cat || 'all'}
+            type="button"
+            className={`pill${category === cat ? ' active' : ''}`}
+            aria-pressed={category === cat}
+            onClick={() => onCategoryChange(cat)}
+          >
+            {cat || 'All'}
+          </button>
         ))}
-      </select>
+      </div>
+
+      <div className="filter-controls">
+        <label className="search-field">
+          <SearchIcon width={18} height={18} />
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => onSearchChange(e.target.value)}
+            className="search-input"
+            aria-label="Search products"
+          />
+        </label>
+        <select
+          value={sort}
+          onChange={(e) => onSortChange(e.target.value)}
+          className="category-select"
+          aria-label="Sort products"
+        >
+          {SORT_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   );
 };

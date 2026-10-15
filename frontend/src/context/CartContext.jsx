@@ -1,10 +1,16 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import {
   addToCart as addToCartRequest,
   getCart,
   removeFromCart as removeFromCartRequest,
-  updateCartQuantity as updateCartQuantityRequest
-} from '../services/api';
+  updateCartQuantity as updateCartQuantityRequest,
+} from "../services/api";
 
 const CartContext = createContext(null);
 
@@ -12,23 +18,23 @@ export const CartProvider = ({ user, children }) => {
   const userId = user?._id;
   const [cartItems, setCartItems] = useState([]);
   const [cartLoading, setCartLoading] = useState(Boolean(user));
-  const [cartError, setCartError] = useState('');
+  const [cartError, setCartError] = useState("");
 
   const refreshCart = useCallback(async () => {
     if (!userId) {
       setCartItems([]);
-      setCartError('');
+      setCartError("");
       setCartLoading(false);
       return;
     }
 
     setCartLoading(true);
-    setCartError('');
+    setCartError("");
     try {
       const data = await getCart();
       setCartItems(data.cart || []);
     } catch (error) {
-      setCartError('Unable to load your cart.');
+      setCartError("Unable to load your cart.");
     } finally {
       setCartLoading(false);
     }
@@ -37,7 +43,7 @@ export const CartProvider = ({ user, children }) => {
   useEffect(() => {
     if (!userId) {
       setCartItems([]);
-      setCartError('');
+      setCartError("");
       setCartLoading(false);
       return;
     }
@@ -59,19 +65,29 @@ export const CartProvider = ({ user, children }) => {
     setCartItems(data.cart || []);
   };
 
-  const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
+  const cartItemCount = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0,
+  );
 
   return (
-    <CartContext.Provider value={{
-      cartItems,
-      cartItemCount,
-      cartLoading,
-      cartError,
-      refreshCart,
-      addItem,
-      updateQuantity,
-      removeItem
-    }}>
+    <CartContext.Provider
+      value={{
+        cartItems,
+        cartItemCount,
+        cartLoading,
+        cartError,
+        refreshCart,
+        addItem,
+        updateQuantity,
+        removeItem,
+        clearCart,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
@@ -79,6 +95,6 @@ export const CartProvider = ({ user, children }) => {
 
 export const useCart = () => {
   const context = useContext(CartContext);
-  if (!context) throw new Error('useCart must be used inside CartProvider');
+  if (!context) throw new Error("useCart must be used inside CartProvider");
   return context;
 };

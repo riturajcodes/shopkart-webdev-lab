@@ -60,7 +60,7 @@ export const removeFromWishlist = async (productId) => {
 };
 
 export const getCart = async () => {
-  const response = await api.get('/cart');
+  const response = await api.get("/cart");
   return response.data;
 };
 
@@ -76,6 +76,28 @@ export const updateCartQuantity = async (productId, quantity) => {
 
 export const removeFromCart = async (productId) => {
   const response = await api.delete(`/cart/${productId}`);
+  return response.data;
+};
+
+export const createPaymentOrder = async (shippingAddress) => {
+  const response = await api.post("/orders/create-payment-order", {
+    shippingAddress,
+  });
+  return response.data;
+};
+
+export const verifyPayment = async (payload) => {
+  const response = await api.post("/orders/verify-payment", payload);
+  return response.data;
+};
+
+export const getOrders = async () => {
+  const response = await api.get("/orders");
+  return response.data;
+};
+
+export const getOrderById = async (id) => {
+  const response = await api.get(`/orders/${id}`);
   return response.data;
 };
 

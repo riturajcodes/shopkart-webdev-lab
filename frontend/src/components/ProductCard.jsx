@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { addToWishlist } from '../services/api';
 import { useCart } from '../context/CartContext';
+import { formatPrice } from '../constants';
+import { HeartIcon } from './Icons';
 
-const WISHLIST_LABEL = {
-  idle: '♡ Add to Wishlist',
-  saving: '⏳ Saving...',
-  saved: '♥ Added to Wishlist'
-};
+const LOW_STOCK_THRESHOLD = 10;
 
 const ProductCard = ({ product }) => {
-  const navigate = useNavigate();
   const { addItem } = useCart();
   const [status, setStatus] = useState('idle');
   const [error, setError] = useState('');
   const [adding, setAdding] = useState(false);
+  const [added, setAdded] = useState(false);
   const inStock = product.stock > 0;
+  const lowStock = inStock && product.stock <= LOW_STOCK_THRESHOLD;
+  const detailsPath = `/products/${product._id}`;
 
   const handleWishlist = async () => {
     setStatus('saving');
@@ -39,6 +39,8 @@ const ProductCard = ({ product }) => {
     setError('');
     try {
       await addItem(product._id);
+      setAdded(true);
+      setTimeout(() => setAdded(false), 1800);
     } catch (err) {
       setError(err.response?.status === 401 ? 'Please login to add products to your cart.' : 'Unable to add product to cart.');
     } finally {
@@ -49,23 +51,37 @@ const ProductCard = ({ product }) => {
   return (
     <div className="product-card">
       <div className="product-image">
-        <img src={product.image} alt={product.name} />
+        <Link to={detailsPath} className="product-image-link" aria-label={`View ${product.name}`}>
+          <img src={product.image} alt={product.name} loading="lazy" />
+        </Link>
+
+        {!inStock && <span className="product-badge badge-sold-out">Sold out</span>}
+        {lowStock && <span className="product-badge badge-low">Only {product.stock} left</span>}
+
+        <button
+          type="button"
+          className={`wishlist-btn${status === 'saved' ? ' saved' : ''}`}
+          onClick={handleWishlist}
+          disabled={status !== 'idle'}
+          aria-label={status === 'saved' ? 'Saved to wishlist' : 'Add to wishlist'}
+        >
+          <HeartIcon width={20} height={20} />
+        </button>
+
+        <button
+          type="button"
+          className="quick-add"
+          onClick={handleAddToCart}
+          disabled={adding || !inStock}
+        >
+          {!inStock ? 'Sold out' : adding ? 'Adding...' : added ? 'Added to bag ✓' : 'Add to bag'}
+        </button>
       </div>
-      <div className="product-brand">{product.category}</div>
-      <div className="product-name">{product.name}</div>
-      <div className="product-price">₹{product.price.toLocaleString('en-IN')}</div>
-      <div className={`stock-status${inStock ? '' : ' out-of-stock'}`}>
-        {inStock ? `${product.stock} units left` : 'Out of stock'}
+
+      <div className="product-meta">
+        <Link to={detailsPath} className="product-name">{product.name}</Link>
+        <div className="product-price">{formatPrice(product.price)}</div>
       </div>
-      <button className="btn-black" onClick={() => navigate(`/products/${product._id}`)}>
-        View Details
-      </button>
-      <button className="btn-outline" onClick={handleAddToCart} disabled={adding || !inStock}>
-        {adding ? 'Adding...' : 'Add to Cart'}
-      </button>
-      <button className="btn-outline" onClick={handleWishlist} disabled={status !== 'idle'}>
-        {WISHLIST_LABEL[status]}
-      </button>
       {error && <div className="field-error">{error}</div>}
     </div>
   );
