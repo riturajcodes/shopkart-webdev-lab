@@ -3,24 +3,12 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const corsMiddleware = require("./middlewares/cors.middleware");
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use((req, res, next) => {
-  const origin = req.headers.origin || "http://localhost:3000";
-  res.setHeader("Access-Control-Allow-Origin", origin);
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, PATCH, DELETE, OPTIONS",
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-  next();
-});
+app.use(corsMiddleware);
 
 app.use(express.json());
 app.use(cookieParser());

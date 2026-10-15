@@ -2,7 +2,8 @@ const Customer = require('../models/customer.model');
 const {
   AUTH_COOKIE,
   generateToken,
-  authCookieOptions
+  authCookieOptions,
+  baseCookieOptions
 } = require('../utils/generateToken');
 
 async function registerCustomer(req, res) {
@@ -67,7 +68,7 @@ function getProfile(req, res) {
 }
 
 function logoutCustomer(req, res) {
-  res.clearCookie(AUTH_COOKIE, { httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production' });
+  res.clearCookie(AUTH_COOKIE, baseCookieOptions());
   return res.json({ success: true, message: 'Logged out' });
 }
 
